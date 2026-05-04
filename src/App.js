@@ -13,10 +13,10 @@ const START_DATE = new Date('2026-05-04T00:00:00');
 
 // Data awal (Posisi pada minggu pertama / START_DATE)
 const INITIAL_GROUPS = [
-  ['Agus', 'Genta', 'Angel', 'Arbie', 'Aidil'],  // Kelompok 0 (Mulai di Nyapu 1)
-  ['Arif', 'Dita', 'Bobby', 'Nana', 'Rivai'],    // Kelompok 1 (Mulai di Nyapu 2)
-  ['Aldi', 'Yoga', 'Ihwan', 'Reza', 'Saskia'],   // Kelompok 2 (Mulai di Cuci Piring)
-  ['Suci', 'Relli', 'Adit', 'Dani', 'Sari']      // Kelompok 3 (Mulai di Ngepel)
+  ['Aldi', 'Yoga', 'Ihwan', 'Reza', 'Saskia'],  // Kelompok 0 (Mulai di Nyapu 1)
+  ['Suci', 'Relli', 'Adit', 'Dani', 'Sari'],	// Kelompok 1 (Mulai di Nyapu 2)
+  ['Agus', 'Genta', 'Angel', 'Arbie', 'Aidil'],	// Kelompok 2 (Mulai di Cuci Piring)
+  ['Arif', 'Dita', 'Bobby', 'Nana', 'Rivai'],	// Kelompok 3 (Mulai di Ngepel)	
 ];
 
 // Fungsi mencari tanggal Hari Senin dari tanggal tertentu
@@ -78,8 +78,8 @@ function App() {
           </h2>
           <p style={{ margin: '5px 0 0 0', color: '#666' }}>
             {absoluteWeekOffset === 0 ? "Minggu Ini" : 
-             absoluteWeekOffset > 0 ? `+${absoluteWeekOffset} Minggu` : 
-             `${absoluteWeekOffset} Minggu`}
+            absoluteWeekOffset > 0 ? `+${absoluteWeekOffset} Minggu` : 
+            `${absoluteWeekOffset} Minggu`}
           </p>
         </div>
         <button onClick={nextWeek} style={{ padding: '8px 16px', cursor: 'pointer' }}>
@@ -128,9 +128,9 @@ function App() {
       </div>
       
       <div style={{ marginTop: '15px', textAlign: 'center' }}>
-         <button onClick={() => setBaseDate(getMondayOf(new Date()))} style={{ padding: '8px 16px', backgroundColor: '#2196F3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+        <button onClick={() => setBaseDate(getMondayOf(new Date()))} style={{ padding: '8px 16px', backgroundColor: '#2196F3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
             🔄 Kembali ke Hari Ini
-         </button>
+        </button>
       </div>
     </div>
   );
