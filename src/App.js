@@ -5,14 +5,18 @@ const TASKS = ['Nyapu 1', 'Nyapu 2', 'Cuci Piring', 'Ngepel'];
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
 
 const START_DATE = new Date('2026-05-04T00:00:00'); 
+
+// 1. UBAH DATA LIBUR JADI OBJECT AGAR ADA NAMANYA
 const HOLIDAYS = [
-  '2026-05-01', // Hari Buruh
-  '2026-05-14', // Kenaikan Yesus Kristus
-  '2026-06-01', // Hari Lahir Pancasila
+  { date: '2026-05-01', name: 'Hari Buruh' },
+  { date: '2026-05-14', name: 'Kenaikan Yesus Kristus' },
+  { date: '2026-05-27', name: 'Idul Adha' },
+  { date: '2026-06-01', name: 'Hari Lahir Pancasila' },
+  { date: '2026-06-16', name: 'Tahun Baru Islam' },
+  { date: '2026-08-17', name: 'Hari Kemerdekaan Indonesia' },
+  { date: '2026-08-25', name: 'Maulid Nabi Muhammad SAW' },
 ];
 
-// DATA DIROBAH JADI PER-HARI (KOLOM) AGAR ROTASI BISA INDEPENDEN
-// Urutan ke bawah: Nyapu 1, Nyapu 2, Cuci Piring, Ngepel
 const PEOPLE_BY_DAY = [
   ['Aldi', 'Suci', 'Agus', 'Arif'],       // 0: Senin
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 1: Selasa
@@ -31,11 +35,9 @@ const getMondayOf = (date) => {
 function App() {
   const [baseDate, setBaseDate] = useState(getMondayOf(new Date()));
 
-  // Menghitung putaran minggu dunia nyata
   const diffInMs = baseDate.getTime() - START_DATE.getTime();
   const absoluteWeekOffset = Math.floor(diffInMs / (1000 * 60 * 60 * 24 * 7));
 
-  // Helper untuk format tanggal
   const formatDateToYYYYMMDD = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -43,15 +45,14 @@ function App() {
     return `${year}-${month}-${day}`;
   };
 
-  // MESIN REM: Menghitung berapa kali hari ini libur di masa lalu
+  // 2. SESUAIKAN FUNGSI MESIN REM AGAR MEMBACA OBJECT LIBUR
   const getPastHolidaysCount = (dayIndex, targetDate) => {
     let count = 0;
-    HOLIDAYS.forEach(holidayStr => {
-      const hDate = new Date(holidayStr);
+    HOLIDAYS.forEach(holiday => {
+      const hDate = new Date(holiday.date); // Ambil dari property .date
       hDate.setHours(0, 0, 0, 0);
       
       const isSameDayOfWeek = hDate.getDay() === (dayIndex + 1); 
-      // Jika liburnya terjadi SEBELUM tanggal yang sedang dilihat, tambah rem-nya
       if (isSameDayOfWeek && hDate >= START_DATE && hDate < targetDate) {
         count++;
       }
@@ -76,6 +77,20 @@ function App() {
     date.setDate(baseDate.getDate() + index);
     return date;
   });
+
+  // 3. CARI APAKAH ADA HARI LIBUR DI MINGGU YANG SEDANG TAMPIL
+  const holidaysThisWeek = currentWeekDates.reduce((acc, date) => {
+    const dateStr = formatDateToYYYYMMDD(date);
+    const foundHoliday = HOLIDAYS.find(h => h.date === dateStr);
+    if (foundHoliday) {
+      // Simpan data libur beserta format tanggalnya untuk di-render nanti
+      acc.push({ 
+        ...foundHoliday, 
+        formattedDate: date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long' }) 
+      });
+    }
+    return acc;
+  }, []);
 
   const formatDate = (date) => {
     return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -133,24 +148,25 @@ function App() {
                 {DAYS.map((_, dayIndex) => {
                   const cellDate = currentWeekDates[dayIndex];
                   const dateStr = formatDateToYYYYMMDD(cellDate);
-                  const isHoliday = HOLIDAYS.includes(dateStr);
+                  
+                  // 4. SESUAIKAN LOGIKA PENCARIAN LIBUR DI DALAM TABEL
+                  const holidayItem = HOLIDAYS.find(h => h.date === dateStr);
 
-                  // JIKA HARI INI LIBUR, TAMPILKAN UI LIBUR
-                  if (isHoliday) {
+                  if (holidayItem) {
                     return (
-                      <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px', backgroundColor: '#ffebee', color: '#d32f2f', fontWeight: 'bold' }}>
-                        LIBUR
+                      <td 
+                        key={dayIndex} 
+                        title={holidayItem.name} // Menambahkan tooltip saat mouse diarahkan ke sel
+                        style={{ border: '1px solid #ccc', padding: '12px', backgroundColor: '#ffebee', color: '#d32f2f', fontWeight: 'bold', cursor: 'help' }}
+                      >
+                      LIBUR
                       </td>
                     );
                   }
 
-                  // JIKA TIDAK LIBUR, KALKULASI SIAPA YANG BERTUGAS
                   const pastHolidaysCount = getPastHolidaysCount(dayIndex, cellDate);
-                  
-                  // Rotasi melambat sebanyak jumlah libur yang terjadi di hari tersebut
                   const effectiveOffset = absoluteWeekOffset - pastHolidaysCount;
 
-                  // Cari index orang yang bertugas (tahan angka agar tidak minus)
                   let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
                   if (personIndex < 0) personIndex += TASKS.length; 
 
@@ -168,9 +184,23 @@ function App() {
         </table>
       </div>
 
-      <div style={{ marginTop: '15px', textAlign: 'center' }}>
+      {/* 5. TAMPILKAN KETERANGAN LIBUR (HANYA JIKA ADA LIBUR DI MINGGU INI) */}
+      {holidaysThisWeek.length > 0 && (
+        <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#fff3e0', borderLeft: '5px solid #ff9800', borderRadius: '4px', textAlign: 'left' }}>
+          <h4 style={{ margin: '0 0 8px 0', color: '#e65100' }}>ℹ️ Keterangan Libur:</h4>
+          <ul style={{ margin: 0, paddingLeft: '20px', color: '#e65100' }}>
+            {holidaysThisWeek.map((holiday, idx) => (
+              <li key={idx}>
+                <strong>{holiday.formattedDate}:</strong> {holiday.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
         <button onClick={() => setBaseDate(getMondayOf(new Date()))} style={{ padding: '8px 16px', backgroundColor: '#2196F3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-        Kembali ke Hari Ini
+          Kembali ke Hari Ini
         </button>
       </div>
     </div>
