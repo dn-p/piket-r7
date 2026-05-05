@@ -4,28 +4,23 @@ import './App.css';
 const TASKS = ['Nyapu 1', 'Nyapu 2', 'Cuci Piring', 'Ngepel'];
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
 
-// =========================================================
-// PENTING: TENTUKAN TANGGAL HARI SENIN JADWAL INI DIMULAI!
-// Format: 'YYYY-MM-DD' (Tahun-Bulan-Tanggal)
-// Contoh di bawah: Jadwal dimulai pada Senin, 4 Mei 2026
-// =========================================================
-const START_DATE = new Date('2026-05-04T00:00:00');
+const START_DATE = new Date('2026-05-04T00:00:00'); 
 const HOLIDAYS = [
   '2026-05-01', // Hari Buruh
   '2026-05-14', // Kenaikan Yesus Kristus
   '2026-06-01', // Hari Lahir Pancasila
-  // Tambahkan tanggal merah lainnya di sini...
 ];
 
-// Data awal (Posisi pada minggu pertama / START_DATE)
-const INITIAL_GROUPS = [
-  ['Aldi', 'Genta', 'Ihwan', 'Reza', 'Saskia'],  // Kelompok 0 (Mulai di Nyapu 1)
-  ['Suci', 'Dita', 'Adit', 'Dani', 'Sari'],	// Kelompok 1 (Mulai di Nyapu 2)
-  ['Agus', 'Relli', 'Angel', 'Arbie', 'Aidil'],	// Kelompok 2 (Mulai di Cuci Piring)
-  ['Arif', 'Yoga', 'Bobby', 'Nana', 'Rivai'],	// Kelompok 3 (Mulai di Ngepel)	
+// DATA DIROBAH JADI PER-HARI (KOLOM) AGAR ROTASI BISA INDEPENDEN
+// Urutan ke bawah: Nyapu 1, Nyapu 2, Cuci Piring, Ngepel
+const PEOPLE_BY_DAY = [
+  ['Aldi', 'Suci', 'Agus', 'Arif'],       // 0: Senin
+  ['Genta', 'Dita', 'Relli', 'Yoga'],     // 1: Selasa
+  ['Ihwan', 'Adit', 'Angel', 'Bobby'],    // 2: Rabu
+  ['Reza', 'Dani', 'Arbie', 'Nana'],      // 3: Kamis
+  ['Saskia', 'Sari', 'Aidil', 'Rivai']    // 4: Jumat
 ];
 
-// Fungsi mencari tanggal Hari Senin dari tanggal tertentu
 const getMondayOf = (date) => {
   const d = new Date(date);
   const day = d.getDay();
@@ -34,15 +29,36 @@ const getMondayOf = (date) => {
 };
 
 function App() {
-  // State otomatis disetel ke Hari Senin di minggu SAAT INI (dunia nyata)
   const [baseDate, setBaseDate] = useState(getMondayOf(new Date()));
 
-  // Menghitung SELISIH MINGGU antara minggu yang sedang dilihat dengan TANGGAL MULAI
-  // Ini yang membuat rotasi berjalan otomatis tanpa harus klik tombol!
+  // Menghitung putaran minggu dunia nyata
   const diffInMs = baseDate.getTime() - START_DATE.getTime();
   const absoluteWeekOffset = Math.floor(diffInMs / (1000 * 60 * 60 * 24 * 7));
 
-  // Navigasi manual untuk melihat-lihat
+  // Helper untuk format tanggal
+  const formatDateToYYYYMMDD = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // MESIN REM: Menghitung berapa kali hari ini libur di masa lalu
+  const getPastHolidaysCount = (dayIndex, targetDate) => {
+    let count = 0;
+    HOLIDAYS.forEach(holidayStr => {
+      const hDate = new Date(holidayStr);
+      hDate.setHours(0, 0, 0, 0);
+      
+      const isSameDayOfWeek = hDate.getDay() === (dayIndex + 1); 
+      // Jika liburnya terjadi SEBELUM tanggal yang sedang dilihat, tambah rem-nya
+      if (isSameDayOfWeek && hDate >= START_DATE && hDate < targetDate) {
+        count++;
+      }
+    });
+    return count;
+  };
+
   const nextWeek = () => {
     const next = new Date(baseDate);
     next.setDate(baseDate.getDate() + 7);
@@ -55,7 +71,6 @@ function App() {
     setBaseDate(prev);
   };
 
-  // Menghitung tanggal Senin - Jumat untuk dirender
   const currentWeekDates = DAYS.map((_, index) => {
     const date = new Date(baseDate);
     date.setDate(baseDate.getDate() + index);
@@ -72,11 +87,11 @@ function App() {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: '0 auto' }}>
-      <h1 style={{ textAlign: 'center' }}>Jadwal Piket Kantor </h1>
+      <h1 style={{ textAlign: 'center' }}>Jadwal Piket Kantor</h1>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '8px' }}>
         <button onClick={prevWeek} style={{ padding: '8px 16px', cursor: 'pointer' }}>
-          ⬅️ Minggu Sebelumnya
+          Minggu Sebelumnya
         </button>
         <div style={{ textAlign: 'center' }}>
           <h2 style={{ margin: 0, color: '#333' }}>
@@ -89,7 +104,7 @@ function App() {
           </p>
         </div>
         <button onClick={nextWeek} style={{ padding: '8px 16px', cursor: 'pointer' }}>
-          Minggu Depan ➡️
+          Minggu Depan
         </button>
       </div>
 
@@ -109,54 +124,53 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {TASKS.map((task, taskIndex) => {
-              // Logika rotasi menggunakan absoluteWeekOffset (otomatis sesuai tanggal dunia nyata)
-              // Menghindari hasil negatif pada modulo di JavaScript
-              const offset = ((absoluteWeekOffset % TASKS.length) + TASKS.length) % TASKS.length;
-              const groupIndex = (taskIndex - offset + TASKS.length) % TASKS.length;
-              const assignedGroup = INITIAL_GROUPS[groupIndex];
+            {TASKS.map((task, taskIndex) => (
+              <tr key={taskIndex}>
+                <td style={{ border: '1px solid #ccc', padding: '12px', fontWeight: 'bold', backgroundColor: '#f1f1f1' }}>
+                  {task}
+                </td>
+                
+                {DAYS.map((_, dayIndex) => {
+                  const cellDate = currentWeekDates[dayIndex];
+                  const dateStr = formatDateToYYYYMMDD(cellDate);
+                  const isHoliday = HOLIDAYS.includes(dateStr);
 
-              return (
-                <tr key={taskIndex}>
-                  <td style={{ border: '1px solid #ccc', padding: '12px', fontWeight: 'bold', backgroundColor: '#f1f1f1' }}>
-                    {task}
-                  </td>
-                  {assignedGroup.map((person, personIndex) => {
-                    // Ambil objek tanggal dari kolom ini
-                    const dateObj = currentWeekDates[personIndex];
-
-                    // Format tanggal ke YYYY-MM-DD secara manual agar kebal dari masalah Zona Waktu browser
-                    const year = dateObj.getFullYear();
-                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                    const day = String(dateObj.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${month}-${day}`;
-
-                    // Cek apakah tanggal ini ada di dalam array HOLIDAYS
-                    const isHoliday = HOLIDAYS.includes(dateStr);
-
+                  // JIKA HARI INI LIBUR, TAMPILKAN UI LIBUR
+                  if (isHoliday) {
                     return (
-                      <td key={personIndex} style={{
-                        border: '1px solid #ccc',
-                        padding: '12px',
-                        backgroundColor: isHoliday ? '#ffebee' : 'transparent', // Merah muda kalau libur
-                        color: isHoliday ? '#d32f2f' : 'inherit',
-                        fontWeight: isHoliday ? 'bold' : 'normal'
-                      }}>
-                        {/* Kalau libur tulis LIBUR, kalau masuk tulis nama orangnya */}
-                        {isHoliday ? 'LIBUR' : person}
+                      <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px', backgroundColor: '#ffebee', color: '#d32f2f', fontWeight: 'bold' }}>
+                        LIBUR
                       </td>
                     );
-                  })}
-                </tr>
-              );
-            })}
+                  }
+
+                  // JIKA TIDAK LIBUR, KALKULASI SIAPA YANG BERTUGAS
+                  const pastHolidaysCount = getPastHolidaysCount(dayIndex, cellDate);
+                  
+                  // Rotasi melambat sebanyak jumlah libur yang terjadi di hari tersebut
+                  const effectiveOffset = absoluteWeekOffset - pastHolidaysCount;
+
+                  // Cari index orang yang bertugas (tahan angka agar tidak minus)
+                  let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
+                  if (personIndex < 0) personIndex += TASKS.length; 
+
+                  const assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex];
+
+                  return (
+                    <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px' }}>
+                      {assignedPerson}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
       <div style={{ marginTop: '15px', textAlign: 'center' }}>
         <button onClick={() => setBaseDate(getMondayOf(new Date()))} style={{ padding: '8px 16px', backgroundColor: '#2196F3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-          Kembali ke Hari Ini
+        Kembali ke Hari Ini
         </button>
       </div>
     </div>
