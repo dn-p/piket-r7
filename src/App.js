@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 const TASKS = ['Nyapu 1', 'Nyapu 2', 'Cuci Piring', 'Ngepel'];
@@ -102,6 +103,7 @@ function App() {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: '0 auto' }}>
+      <Analytics />
       <h1 style={{ textAlign: 'center' }}>Jadwal Piket Kantor</h1>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '8px' }}>
