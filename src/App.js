@@ -14,9 +14,9 @@ const START_DATE = new Date('2026-05-04T00:00:00');
 // Data awal (Posisi pada minggu pertama / START_DATE)
 const INITIAL_GROUPS = [
   ['Aldi', 'Yoga', 'Ihwan', 'Reza', 'Saskia'],  // Kelompok 0 (Mulai di Nyapu 1)
-  ['Suci', 'Relli', 'Adit', 'Dani', 'Sari'],	// Kelompok 1 (Mulai di Nyapu 2)
-  ['Agus', 'Genta', 'Angel', 'Arbie', 'Aidil'],	// Kelompok 2 (Mulai di Cuci Piring)
-  ['Arif', 'Dita', 'Bobby', 'Nana', 'Rivai'],	// Kelompok 3 (Mulai di Ngepel)	
+  ['Suci', 'Dita', 'Adit', 'Dani', 'Sari'],	// Kelompok 1 (Mulai di Nyapu 2)
+  ['Agus', 'Relli', 'Angel', 'Arbie', 'Aidil'],	// Kelompok 2 (Mulai di Cuci Piring)
+  ['Arif', 'Genta', 'Bobby', 'Nana', 'Rivai'],	// Kelompok 3 (Mulai di Ngepel)	
 ];
 
 // Fungsi mencari tanggal Hari Senin dari tanggal tertentu
