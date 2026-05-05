@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './App.css'; 
+import './App.css';
 
 const TASKS = ['Nyapu 1', 'Nyapu 2', 'Cuci Piring', 'Ngepel'];
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
@@ -9,7 +9,13 @@ const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
 // Format: 'YYYY-MM-DD' (Tahun-Bulan-Tanggal)
 // Contoh di bawah: Jadwal dimulai pada Senin, 4 Mei 2026
 // =========================================================
-const START_DATE = new Date('2026-05-04T00:00:00'); 
+const START_DATE = new Date('2026-05-04T00:00:00');
+const HOLIDAYS = [
+  '2026-05-01', // Hari Buruh
+  '2026-05-14', // Kenaikan Yesus Kristus
+  '2026-06-01', // Hari Lahir Pancasila
+  // Tambahkan tanggal merah lainnya di sini...
+];
 
 // Data awal (Posisi pada minggu pertama / START_DATE)
 const INITIAL_GROUPS = [
@@ -42,7 +48,7 @@ function App() {
     next.setDate(baseDate.getDate() + 7);
     setBaseDate(next);
   };
-  
+
   const prevWeek = () => {
     const prev = new Date(baseDate);
     prev.setDate(baseDate.getDate() - 7);
@@ -59,7 +65,7 @@ function App() {
   const formatDate = (date) => {
     return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
   };
-  
+
   const getMonthYear = (date) => {
     return date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
   };
@@ -67,7 +73,7 @@ function App() {
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '900px', margin: '0 auto' }}>
       <h1 style={{ textAlign: 'center' }}>Jadwal Piket Kantor </h1>
-      
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '8px' }}>
         <button onClick={prevWeek} style={{ padding: '8px 16px', cursor: 'pointer' }}>
           ⬅️ Minggu Sebelumnya
@@ -77,9 +83,9 @@ function App() {
             {getMonthYear(currentWeekDates[0])}
           </h2>
           <p style={{ margin: '5px 0 0 0', color: '#666' }}>
-            {absoluteWeekOffset === 0 ? "Minggu Ini" : 
-            absoluteWeekOffset > 0 ? `+${absoluteWeekOffset} Minggu` : 
-            `${absoluteWeekOffset} Minggu`}
+            {absoluteWeekOffset === 0 ? "Minggu Ini" :
+              absoluteWeekOffset > 0 ? `+${absoluteWeekOffset} Minggu` :
+                `${absoluteWeekOffset} Minggu`}
           </p>
         </div>
         <button onClick={nextWeek} style={{ padding: '8px 16px', cursor: 'pointer' }}>
@@ -115,21 +121,42 @@ function App() {
                   <td style={{ border: '1px solid #ccc', padding: '12px', fontWeight: 'bold', backgroundColor: '#f1f1f1' }}>
                     {task}
                   </td>
-                  {assignedGroup.map((person, personIndex) => (
-                    <td key={personIndex} style={{ border: '1px solid #ccc', padding: '12px' }}>
-                      {person}
-                    </td>
-                  ))}
+                  {assignedGroup.map((person, personIndex) => {
+                    // Ambil objek tanggal dari kolom ini
+                    const dateObj = currentWeekDates[personIndex];
+
+                    // Format tanggal ke YYYY-MM-DD secara manual agar kebal dari masalah Zona Waktu browser
+                    const year = dateObj.getFullYear();
+                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    const dateStr = `${year}-${month}-${day}`;
+
+                    // Cek apakah tanggal ini ada di dalam array HOLIDAYS
+                    const isHoliday = HOLIDAYS.includes(dateStr);
+
+                    return (
+                      <td key={personIndex} style={{
+                        border: '1px solid #ccc',
+                        padding: '12px',
+                        backgroundColor: isHoliday ? '#ffebee' : 'transparent', // Merah muda kalau libur
+                        color: isHoliday ? '#d32f2f' : 'inherit',
+                        fontWeight: isHoliday ? 'bold' : 'normal'
+                      }}>
+                        {/* Kalau libur tulis LIBUR, kalau masuk tulis nama orangnya */}
+                        {isHoliday ? 'LIBUR' : person}
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
-      
+
       <div style={{ marginTop: '15px', textAlign: 'center' }}>
         <button onClick={() => setBaseDate(getMondayOf(new Date()))} style={{ padding: '8px 16px', backgroundColor: '#2196F3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-            🔄 Kembali ke Hari Ini
+          Kembali ke Hari Ini
         </button>
       </div>
     </div>
