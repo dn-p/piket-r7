@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 const TASKS = ['Nyapu 1', 'Nyapu 2', 'Cuci Piring', 'Ngepel'];
@@ -203,6 +204,7 @@ function App() {
           Kembali ke Hari Ini
         </button>
       </div>
+      <Analytics />
     </div>
   );
 }
