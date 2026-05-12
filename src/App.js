@@ -12,7 +12,7 @@ const HOLIDAYS = [
   { date: '2026-05-14', name: 'Kenaikan Yesus Kristus' },
   { date: '2026-05-27', name: 'Idul Adha' },
   { date: '2026-06-01', name: 'Hari Lahir Pancasila' },
-  { date: '2026-06-16', name: 'Tahun Baru Islam' },
+  { date: '2026-06-16', name: 'Tahun Baru Islam 1448H' },
   { date: '2026-08-17', name: 'Hari Kemerdekaan Indonesia' },
   { date: '2026-08-25', name: 'Maulid Nabi Muhammad SAW' },
 ];
@@ -22,7 +22,7 @@ const PEOPLE_BY_DAY = [
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 1: Selasa
   ['Ihwan', 'Adit', 'Angel', 'Bobby'],    // 2: Rabu
   ['Reza', 'Dani', 'Arbie', 'Nana'],      // 3: Kamis
-  ['Saskia', 'Sari', 'Aidil', 'Rivai']    // 4: Jumat
+  ['Sari', 'Aidil', 'Rivai', 'Saskia']    // 4: Jumat
 ];
 
 const getMondayOf = (date) => {
