@@ -12,6 +12,7 @@ const HOLIDAYS = [
   { date: '2026-05-01', name: 'Hari Buruh' },
   { date: '2026-05-14', name: 'Kenaikan Yesus Kristus' },
   { date: '2026-05-27', name: 'Idul Adha' },
+  { date: '2026-05-28', name: 'Haul Adrian Reza' },
   { date: '2026-06-01', name: 'Hari Lahir Pancasila' },
   { date: '2026-06-16', name: 'Tahun Baru Islam 1448H' },
   { date: '2026-08-17', name: 'Hari Kemerdekaan Indonesia' },
