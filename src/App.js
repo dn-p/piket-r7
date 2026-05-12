@@ -23,7 +23,7 @@ const PEOPLE_BY_DAY = [
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 1: Selasa
   ['Ihwan', 'Adit', 'Angel', 'Bobby'],    // 2: Rabu
   ['Reza', 'Dani', 'Arbie', 'Nana'],      // 3: Kamis
-  ['Sari', 'Aidil', 'Rivai', 'Saskia']    // 4: Jumat
+  ['Aidil', 'Rivai', 'Saskia', 'Sari']    // 4: Jumat
 ];
 
 const getMondayOf = (date) => {
