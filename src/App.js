@@ -42,7 +42,7 @@ function App() {
   // Menghitung jarak minggu yang sedang tampil di layar dengan kalender hari ini
   const todayMonday = getMondayOf(new Date());
   const diffFromTodayMs = baseDate.getTime() - todayMonday.getTime();
-  const relativeWeekOffset = Math.round(diffFromTodayMs / (1000 * 60 * 60 * 24 * 7));
+
 
   const formatDateToYYYYMMDD = (date) => {
     const year = date.getFullYear();
