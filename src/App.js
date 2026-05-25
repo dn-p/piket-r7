@@ -22,9 +22,9 @@ const HOLIDAYS = [
 const PEOPLE_BY_DAY = [
   ['Aldi', 'Suci', 'Agus', 'Arif'],       // 0: Senin
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 1: Selasa
-  ['Ihwan', 'Adit', 'Angel', 'Bobby'],    // 2: Rabu
+  ['Ihwan', 'Hanifah', 'Angel', 'Bobby'],    // 2: Rabu
   ['Reza', 'Dani', 'Arbie', 'Nana'],      // 3: Kamis
-  ['Aidil', 'Rivai', 'Saskia', 'Sari']    // 4: Jumat
+  ['Aidil', 'Rivai', 'Saskia', 'Ayu']    // 4: Jumat
 ];
 
 const getMondayOf = (date) => {
@@ -39,6 +39,10 @@ function App() {
 
   const diffInMs = baseDate.getTime() - START_DATE.getTime();
   const absoluteWeekOffset = Math.floor(diffInMs / (1000 * 60 * 60 * 24 * 7));
+  // Menghitung jarak minggu yang sedang tampil di layar dengan kalender hari ini
+  const todayMonday = getMondayOf(new Date());
+  const diffFromTodayMs = baseDate.getTime() - todayMonday.getTime();
+  const relativeWeekOffset = Math.round(diffFromTodayMs / (1000 * 60 * 60 * 24 * 7));
 
   const formatDateToYYYYMMDD = (date) => {
     const year = date.getFullYear();
