@@ -20,11 +20,11 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-  ['Aldi', 'Suci', 'Agus', 'Arif'],       // 0: Senin
-  ['Genta', 'Dita', 'Relli', 'Yoga'],     // 1: Selasa
-  ['Ihwan', 'Adit', 'Angel', 'Bobby'],    // 2: Rabu
-  ['Reza', 'Dani', 'Hanifah', 'Nana'],      // 3: Kamis
-  ['Aidil', 'Rivai', 'Saskia', 'Ayu']    // 4: Jumat
+  ['Aidil', 'Rivai', 'Saskia', 'Ayu'],    // 0: Senin
+  ['Aldi', 'Suci', 'Agus'],   		  // 1: Selasa
+  ['Genta', 'Dita', 'Relli', 'Yoga'],     // 2: Rabu
+  ['Ihwan', 'Angel', 'Bobby'],      	  // 3: Kamis
+  ['Reza', 'Dani', 'Hanifah', 'Nana']     // 4: Jumat
 ];
 
 const getMondayOf = (date) => {
@@ -173,10 +173,21 @@ function App() {
                   const pastHolidaysCount = getPastHolidaysCount(dayIndex, cellDate);
                   const effectiveOffset = absoluteWeekOffset - pastHolidaysCount;
 
-                  let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
-                  if (personIndex < 0) personIndex += TASKS.length; 
+                  let assignedPerson = '-';
+                  const isTuesdayOrThursday = dayIndex === 1 || dayIndex === 3;
 
-                  const assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex];
+                  if (isTuesdayOrThursday) {
+                    if (TASKS[taskIndex] !== 'Ngepel') {
+                      const numPeople = PEOPLE_BY_DAY[dayIndex].length;
+                      let personIndex = (taskIndex - effectiveOffset) % numPeople;
+                      if (personIndex < 0) personIndex += numPeople;
+                      assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex] || '-';
+                    }
+                  } else {
+                    let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
+                    if (personIndex < 0) personIndex += TASKS.length;
+                    assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex] || '-';
+                  }
 
                   return (
                     <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px' }}>
