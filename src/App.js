@@ -42,6 +42,7 @@ function App() {
   // Menghitung jarak minggu yang sedang tampil di layar dengan kalender hari ini
   const todayMonday = getMondayOf(new Date());
   const diffFromTodayMs = baseDate.getTime() - todayMonday.getTime();
+  const relativeWeekOffset = Math.round(diffFromTodayMs / (1000 * 60 * 60 * 24 * 7));
 
 
   const formatDateToYYYYMMDD = (date) => {
@@ -119,9 +120,9 @@ function App() {
             {getMonthYear(currentWeekDates[0])}
           </h2>
           <p style={{ margin: '5px 0 0 0', color: '#666' }}>
-            {absoluteWeekOffset === 0 ? "Minggu Ini" :
-              absoluteWeekOffset > 0 ? `+${absoluteWeekOffset} Minggu` :
-                `${absoluteWeekOffset} Minggu`}
+            {relativeWeekOffset === 0 ? "Minggu Ini" :
+              relativeWeekOffset > 0 ? `+${relativeWeekOffset} Minggu` :
+                `${relativeWeekOffset} Minggu`}
           </p>
         </div>
         <button onClick={nextWeek} style={{ padding: '8px 16px', cursor: 'pointer' }}>
