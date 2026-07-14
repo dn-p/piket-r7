@@ -20,7 +20,7 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-  ['Aidil', 'Rivai', 'Saskia', 'Ayu'],    // 0: Senin
+  ['Rivai', 'Saskia', 'Ayu'],    // 0: Senin
   ['Aldi', 'Suci', 'Agus'],   		  // 1: Selasa
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 2: Rabu
   ['Ihwan', 'Angel', 'Bobby'],      	  // 3: Kamis
@@ -175,9 +175,9 @@ function App() {
                   const effectiveOffset = absoluteWeekOffset - pastHolidaysCount;
 
                   let assignedPerson = '-';
-                  const isTuesdayOrThursday = dayIndex === 1 || dayIndex === 3;
+                  const isThreePeopleDay = dayIndex === 0 || dayIndex === 1 || dayIndex === 3;
 
-                  if (isTuesdayOrThursday) {
+                  if (isThreePeopleDay) {
                     if (TASKS[taskIndex] !== 'Ngepel') {
                       const numPeople = PEOPLE_BY_DAY[dayIndex].length;
                       let personIndex = (taskIndex - effectiveOffset) % numPeople;

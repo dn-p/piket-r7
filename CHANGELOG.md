@@ -4,6 +4,27 @@ Semua perubahan penting pada proyek **Jadwal Piket Kantor** akan dicatat di doku
 
 ---
 
+## [1.1.1] - 2026-07-07
+
+### Perbaikan
+
+#### 1. Label Offset Minggu Sekarang Relatif dari Hari Ini
+* **Sebelumnya:** Label "+N Minggu" dihitung dari `START_DATE` (`2026-05-04`), sehingga menampilkan angka yang tidak intuitif (contoh: "+8 Minggu" saat melihat minggu lalu).
+* **Sesudah:** Label sekarang dihitung relatif dari **minggu saat ini**, sehingga lebih aktual dan mudah dipahami:
+  * Melihat minggu ini → **"Minggu Ini"**
+  * Melihat minggu depan → **"+1 Minggu"**
+  * Melihat minggu lalu → **"-1 Minggu"**
+* **Catatan:** Logika rotasi piket (`absoluteWeekOffset`) **tidak berubah** — perubahan hanya pada label tampilan.
+
+---
+
+### Perubahan File
+* `src/App.js`:
+  * Menambahkan variabel `relativeWeekOffset` yang dihitung dari selisih minggu tampil dengan minggu hari ini.
+  * Mengganti referensi label dari `absoluteWeekOffset` ke `relativeWeekOffset`.
+
+---
+
 ## [1.1.0] - 2026-07-06
 
 ### Pembaruan & Perubahan
