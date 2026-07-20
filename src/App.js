@@ -20,11 +20,11 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-  ['Rivai', 'Saskia', 'Ayu'],    // 0: Senin
+  ['Rivai', 'Hanifah', 'Ayu'],    // 0: Senin
   ['Aldi', 'Suci', 'Agus'],   		  // 1: Selasa
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 2: Rabu
   ['Ihwan', 'Angel', 'Bobby'],      	  // 3: Kamis
-  ['Reza', 'Dani', 'Hanifah', 'Nana']     // 4: Jumat
+  ['Reza', 'Dani', 'Nana']     // 4: Jumat
 ];
 
 const getMondayOf = (date) => {
@@ -33,7 +33,6 @@ const getMondayOf = (date) => {
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   return new Date(d.setHours(0, 0, 0, 0) && d.setDate(diff));
 };
-
 function App() {
   const [baseDate, setBaseDate] = useState(getMondayOf(new Date()));
 
@@ -175,7 +174,7 @@ function App() {
                   const effectiveOffset = absoluteWeekOffset - pastHolidaysCount;
 
                   let assignedPerson = '-';
-                  const isThreePeopleDay = dayIndex === 0 || dayIndex === 1 || dayIndex === 3;
+                  const isThreePeopleDay = dayIndex === 0 || dayIndex === 1 || dayIndex === 3 || dayIndex === 4;
 
                   if (isThreePeopleDay) {
                     if (TASKS[taskIndex] !== 'Ngepel') {
