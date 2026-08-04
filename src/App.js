@@ -7,6 +7,11 @@ const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
 
 const START_DATE = new Date('2026-05-04T00:00:00'); 
 
+// Tugas fixed (tidak ikut rolling)
+const FIXED_TASKS = [
+  { name: 'Nyapu Halaman', assignments: { 0: 'Adit', 3: 'Donni' } }, // 0: Senin, 3: Kamis
+];
+
 // 1. UBAH DATA LIBUR JADI OBJECT AGAR ADA NAMANYA
 const HOLIDAYS = [
   { date: '2026-05-01', name: 'Hari Buruh' },
@@ -20,11 +25,11 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-  ['Rivai', 'Hanifah', 'Ayu'],    // 0: Senin
-  ['Aldi', 'Suci', 'Agus'],   		  // 1: Selasa
+  ['Rifai', 'Hanifah', 'Ayu', 'Alfad'],    // 0: Senin
+  ['Aldi', 'Suci', 'Agus', 'Sinta'],   		  // 1: Selasa
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 2: Rabu
-  ['Ihwan', 'Angel', 'Bobby'],      	  // 3: Kamis
-  ['Reza', 'Dani', 'Nana']     // 4: Jumat
+  ['Ihwan', 'Angel', 'Bobby', 'Adifta'],      	  // 3: Kamis
+  ['Reza', 'Dani', 'Nana', 'Irna']     // 4: Jumat
 ];
 
 const getMondayOf = (date) => {
@@ -174,24 +179,41 @@ function App() {
                   const effectiveOffset = absoluteWeekOffset - pastHolidaysCount;
 
                   let assignedPerson = '-';
-                  const isThreePeopleDay = dayIndex === 0 || dayIndex === 1 || dayIndex === 3 || dayIndex === 4;
-
-                  if (isThreePeopleDay) {
-                    if (TASKS[taskIndex] !== 'Ngepel') {
-                      const numPeople = PEOPLE_BY_DAY[dayIndex].length;
-                      let personIndex = (taskIndex - effectiveOffset) % numPeople;
-                      if (personIndex < 0) personIndex += numPeople;
-                      assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex] || '-';
-                    }
-                  } else {
-                    let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
-                    if (personIndex < 0) personIndex += TASKS.length;
-                    assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex] || '-';
-                  }
+                  let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
+                  if (personIndex < 0) personIndex += TASKS.length;
+                  assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex] || '-';
 
                   return (
                     <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px' }}>
                       {assignedPerson}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+            {/* Baris tugas fixed (tidak ikut rolling) */}
+            {FIXED_TASKS.map((fixedTask, ftIndex) => (
+              <tr key={`fixed-${ftIndex}`}>
+                <td style={{ border: '1px solid #ccc', padding: '12px', fontWeight: 'bold', backgroundColor: '#f1f1f1' }}>
+                  {fixedTask.name}
+                </td>
+                {DAYS.map((_, dayIndex) => {
+                  const cellDate = currentWeekDates[dayIndex];
+                  const dateStr = formatDateToYYYYMMDD(cellDate);
+                  const holidayItem = HOLIDAYS.find(h => h.date === dateStr);
+
+                  if (holidayItem) {
+                    return (
+                      <td key={dayIndex} title={holidayItem.name} style={{ border: '1px solid #ccc', padding: '12px', backgroundColor: '#ffebee', color: '#d32f2f', fontWeight: 'bold', cursor: 'help' }}>
+                        LIBUR
+                      </td>
+                    );
+                  }
+
+                  const person = fixedTask.assignments[dayIndex] || '-';
+                  return (
+                    <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px' }}>
+                      {person}
                     </td>
                   );
                 })}
