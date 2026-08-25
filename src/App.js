@@ -28,7 +28,7 @@ const PEOPLE_BY_DAY = [
   ['Rifai', 'Hanifah', 'Ayu', 'Aji'],    // 0: Senin
   ['Suci', 'Agus', 'Aldi', 'Sinta'],   		  // 1: Selasa
   ['Genta', 'Dita', 'Relli', 'Yoga'],     // 2: Rabu
-  ['Ihwan', 'Angel', 'Bobby', 'Adifta'],      	  // 3: Kamis
+  ['Ihwan', 'Donny', 'Bobby', 'Adifta'],      	  // 3: Kamis
   ['Reza', 'Dani', 'Nana', 'Irna']     // 4: Jumat
 ];
 
