@@ -25,11 +25,11 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-  ['Rifai', 'Hanifah', 'Ayu', 'Aji'],    // 0: Senin
-  ['Suci', 'Agus', 'Aldi', 'Sinta'],   		  // 1: Selasa
-  ['Genta', 'Dita', 'Deri', 'Yoga'],     // 2: Rabu
-  ['Ihwan', 'Donny', 'Bobby', 'Adifta'],      	  // 3: Kamis
-  ['Reza', 'Dani', 'Nana', 'Irna']     // 4: Jumat
+    ['Reza', 'Dani', 'Nana', 'Irna'] , // 0: Senin
+  ['Rifai', 'Hanifah', 'Ayu', 'Aji'],  // 1: Selasa  
+  ['Suci', 'Agus', 'Aldi', 'Sinta'],   // 2: Rabu		  
+  ['Genta', 'Dita', 'Deri', 'Yoga'],   // 3: Kamis  
+  ['Ihwan', 'Donny', 'Bobby', 'Adifta']// 4: Jumat      	  
 ];
 
 const getMondayOf = (date) => {
