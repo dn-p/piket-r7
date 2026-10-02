@@ -9,7 +9,7 @@ const START_DATE = new Date('2026-05-04T00:00:00');
 
 // Tugas fixed (tidak ikut rolling)
 const FIXED_TASKS = [
-  { name: 'Nyapu Halaman', assignments: { 0: 'Adit', 4: 'Alfad' } }, // 0: Senin, 4: Jumat
+  { name: 'Nyapu Halaman', assignments: { 0: 'Adit'} }, // 0: Senin, 4: Jumat
 ];
 
 // 1. UBAH DATA LIBUR JADI OBJECT AGAR ADA NAMANYA
@@ -25,7 +25,7 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-    ['Reza', 'Dani', 'Nana', 'Irna'] , // 0: Senin
+  ['Reza', 'Dani', 'Alpat', 'Irna'] , // 0: Senin
   ['Rifai', 'Hanifah', 'Ayu', 'Aji'],  // 1: Selasa  
   ['Suci', 'Agus', 'Aldi', 'Sinta'],   // 2: Rabu		  
   ['Genta', 'Dita', 'Deri', 'Yoga'],   // 3: Kamis  
