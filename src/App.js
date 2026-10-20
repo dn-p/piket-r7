@@ -25,7 +25,7 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-  ['Reza', 'Dani', 'Alpat', 'Irna'] , // 0: Senin
+  ['Dani', 'Alpat', 'Irna'] , // 0: Senin
   ['Rifai', 'Hanifah', 'Ayu', 'Aji'],  // 1: Selasa  
   ['Aldi', 'Sinta', 'Suci', 'Agus'],   // 2: Rabu		  
   ['Genta', 'Dita', 'Deri', 'Yoga'],   // 3: Kamis  
