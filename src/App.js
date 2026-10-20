@@ -25,7 +25,7 @@ const HOLIDAYS = [
 ];
 
 const PEOPLE_BY_DAY = [
-  ['Dani', 'Alpat', 'Irna'] , // 0: Senin
+  ['Irna', 'Dani', 'Alpat'] , // 0: Senin
   ['Rifai', 'Hanifah', 'Ayu', 'Aji'],  // 1: Selasa  
   ['Aldi', 'Sinta', 'Suci', 'Agus'],   // 2: Rabu		  
   ['Genta', 'Dita', 'Deri', 'Yoga'],   // 3: Kamis  
@@ -179,9 +179,22 @@ function App() {
                   const effectiveOffset = absoluteWeekOffset - pastHolidaysCount;
 
                   let assignedPerson = '-';
-                  let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
-                  if (personIndex < 0) personIndex += TASKS.length;
-                  assignedPerson = PEOPLE_BY_DAY[dayIndex][personIndex] || '-';
+                  const people = PEOPLE_BY_DAY[dayIndex];
+
+                  // Khusus hari dengan 3 orang (Senin): Ngepel dikosongkan, 3 tugas lainnya di-rolling bergantian
+                  if (dayIndex === 0 || people.length === 3) {
+                    if (task === 'Ngepel') {
+                      assignedPerson = '-';
+                    } else {
+                      let personIndex = (taskIndex - effectiveOffset) % 3;
+                      if (personIndex < 0) personIndex += 3;
+                      assignedPerson = people[personIndex] || '-';
+                    }
+                  } else {
+                    let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
+                    if (personIndex < 0) personIndex += TASKS.length;
+                    assignedPerson = people[personIndex] || '-';
+                  }
 
                   return (
                     <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px' }}>
