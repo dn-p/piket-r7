@@ -182,19 +182,24 @@ function App() {
                   const people = PEOPLE_BY_DAY[dayIndex];
 
                   // Khusus hari dengan 3 orang (Senin): Ngepel dikosongkan, 3 tugas lainnya di-rolling bergantian
-                  if (dayIndex === 0 || people.length === 3) {
-                    if (task === 'Ngepel') {
-                      assignedPerson = '-';
-                    } else {
-                      let personIndex = (taskIndex - effectiveOffset) % 3;
-                      if (personIndex < 0) personIndex += 3;
-                      assignedPerson = people[personIndex] || '-';
-                    }
-                  } else {
+                  // if (dayIndex === 0 || people.length === 3) {
+                  //   if (task === 'Ngepel') {
+                  //     assignedPerson = '-';
+                  //   } else {
+                  //     let personIndex = (taskIndex - effectiveOffset) % 3;
+                  //     if (personIndex < 0) personIndex += 3;
+                  //     assignedPerson = people[personIndex] || '-';
+                  //   }
+                  // } else {
+                  //   let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
+                  //   if (personIndex < 0) personIndex += TASKS.length;
+                  //   assignedPerson = people[personIndex] || '-';
+                  // }
+
+                  // Logika standar untuk semua hari (4 tugas di-rolling untuk 4 orang)
                     let personIndex = (taskIndex - effectiveOffset) % TASKS.length;
                     if (personIndex < 0) personIndex += TASKS.length;
                     assignedPerson = people[personIndex] || '-';
-                  }
 
                   return (
                     <td key={dayIndex} style={{ border: '1px solid #ccc', padding: '12px' }}>
